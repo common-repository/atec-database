@@ -38,20 +38,21 @@ else
 	$colsName 		= $wpdb->get_col_info('name');
 	// @codingStandardsIgnoreEnd
 	
-	echo '<p class="atec-mt-0"><strong>Table:</strong> ', esc_attr($id), ' | <strong>Items:</strong> ', esc_attr(number_format($total_rows)) , '</p>';
-
-	echo '<table class="atec-table atec-table-tiny fixed">
-	<thead><tr><th>#</th>'; foreach ($colsName as $col) { echo '<th>', esc_attr($col), '</th>'; } 	echo '</tr></thead>
-	<tbody>';
+	echo '
+	<p class="atec-mt-0"><strong>Table:</strong> ', esc_attr($id), ' | <strong>Items:</strong> ', esc_attr(number_format($total_rows)) , '</p>
+	<table class="atec-table atec-table-tiny fixed">
+		<thead><tr><th>#</th>'; foreach ($colsName as $col) { echo '<th>', esc_attr($col), '</th>'; } 	echo '</tr></thead>
+		<tbody>';
 
 	$c=($tblPage-1)*$per_page;
 	foreach ($results as $row) 
 	{
 		$c++;
-		echo '
-		<tr><td class="atec-TDBR">', esc_attr($c), '</td>'; foreach ($row as $col) { echo '<td>', esc_attr(atec_short_string($col,256)), '</td>'; } echo '</tr>';
+		echo '<tr><td class="atec-TDBR">', esc_attr($c), '</td>'; foreach ($row as $col) { echo '<td>', esc_attr(atec_short_string($col,256)), '</td>'; } echo '</tr>';
 	}
-	echo '</tbody></table>';
+	echo '
+		</tbody>
+	</table>';
 
 	$url=$url.'&nav=Table&id='.$id.'&_wpnonce='.$nonce.'&tblPage='; 
 	require_once('atec-pagination.php'); new ATEC_pagination($url, $nonce, $total_rows, $per_page, $tblPage);

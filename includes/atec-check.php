@@ -1,7 +1,9 @@
 <?php
 if (!defined( 'ABSPATH' )) { exit; }
+define('ATEC_CHECK_INC',true);
 
 function atec_opt_arr($opt,$slug): array { return array('name'=>$opt, 'opt-name' => 'atec_'.$slug.'_settings' ); }
+function atec_opt_arr_select($opt,$slug,$arr): array { $optArr=atec_opt_arr($opt,$slug); return array_merge($optArr,['array'=>$arr]); }
 
 function atec_button_confirm($url,$nav,$nonce,$action,$dash='trash'): void
 {
@@ -57,5 +59,27 @@ function atec_checkbox($args): void
 		<input id="check_', esc_attr($field), '" type="checkbox" name="', esc_attr($args['opt-name']), '[', esc_attr($field), ']" value="', esc_attr($value), '" onclick="atec_check_validate(\'', esc_attr($field), '\');" ', checked($value,'true',true), '>
 		<label for="check_', esc_attr($field), '">
 	</div>';
+}
+
+function atec_input_select($args): void
+{
+	$option = get_option($args['opt-name'],[]); $field=$args['name']; $value=$option[$field]??''; $arr=$args['array'];
+	echo '<select name="', esc_attr($args['opt-name']), '[', esc_attr($field), ']">';
+	foreach ($arr as $key) { echo '<option value="'.esc_attr($key).'"', selected($value,$key), '>', esc_attr($key), '</option>'; }
+	echo '</select>';
+}
+
+function atec_input_text($args,$type='text'): void
+{
+	$option = get_option($args['opt-name'],[]); $field=$args['name'];
+    echo '<input id="ai_'.esc_attr($field).'" type="', esc_attr($type), '" name="', esc_attr($args['opt-name']), '[', esc_attr($field), ']" value="', esc_attr($option[$field]??''), '">';
+}
+
+function atec_input_password($args): void { atec_input_text($args,$type='password'); }
+
+function atec_input_textarea($args): void
+{
+	$option = get_option($args['opt-name'],[]); $field=$args['name'];
+	echo '<textarea class="atec-fs-10" style="resize:both;" rows="3" cols="30" name="', esc_attr($args['opt-name']), '[', esc_attr($field), ']">', esc_textarea($option[$field]??''), '</textarea>';
 }
 ?>

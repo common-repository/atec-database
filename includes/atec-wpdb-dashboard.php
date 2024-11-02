@@ -18,7 +18,7 @@ echo '
 	echo '
 	<div class="atec-main">';
 
-		require_once('atec-check.php');
+		if (!defined('ATEC_CHECK_INC')) require_once('atec-check.php');
 		require_once('atec-wpdb-plugins.php');
 		$pluginTools=new ATEC_wpdb_plugin_names();
 
@@ -50,32 +50,56 @@ echo '
 		if ($nav=='Info') { require_once('atec-info.php'); new ATEC_info(__DIR__); }
 		elseif ($nav=='Optimize') 
 		{ if (atec_pro_feature('`Optimize´ reorganizes the physical storage of table and index data, to reduce storage space and increase speed')) 
-			{ require_once('atec-wpdb-optimize-pro.php'); new ATEC_wpdb_optimize($url, $nonce, $action, $prefix); } 
+			{ 
+				@include_once('atec-wpdb-optimize-pro.php'); 
+				if (class_exists('ATEC_wpdb_optimize')) new ATEC_wpdb_optimize($url, $nonce, $action, $prefix);
+				else atec_missing_class_check();
+			} 
 		}
 		elseif ($nav=='Comments') 
 		{ if (atec_pro_feature('`Comments´ shows all comments with status SPAM/TRASH – cleanup with a single click')) 
-			{ require_once('atec-wpdb-comments-pro.php'); new ATEC_wpdb_comments($url, $nonce, $action, $prefix); } 
+			{ 
+				@include_once('atec-wpdb-comments-pro.php'); 
+				if (class_exists('ATEC_wpdb_comments')) new ATEC_wpdb_comments($url, $nonce, $action, $prefix); 
+				else atec_missing_class_check();
+			} 
 		}
 		elseif ($nav=='Posts') 
 		{ 
 			if (atec_pro_feature('`Posts´ shows all pages and posts with status TRASH – cleanup with a single click')) 
-			{ require_once('atec-wpdb-posts-pro.php'); new ATEC_wpdb_posts($url, $nonce, $action, $prefix); } 
+			{ 
+				@include_once('atec-wpdb-posts-pro.php'); 
+				if (class_exists('ATEC_wpdb_posts')) new ATEC_wpdb_posts($url, $nonce, $action, $prefix); 
+				else atec_missing_class_check();
+			} 
 		}
 		elseif ($nav=='Revisions') 
 		{ 
 			if (atec_pro_feature('`Revisions´ shows all revisions – cleanup with a single click')) 
-			{ require_once('atec-wpdb-revisions-pro.php'); new ATEC_wpdb_revisions($url, $nonce, $action, $prefix); } 
+			{ 
+				@include_once('atec-wpdb-revisions-pro.php'); 
+				if (class_exists('ATEC_wpdb_revisions')) new ATEC_wpdb_revisions($url, $nonce, $action, $prefix); 
+				else atec_missing_class_check();
+			} 
 		}
 		elseif ($nav=='Table') { require_once('atec-wpdb-table.php'); new ATEC_wpdb_table($url, $nonce, $action); }
 		elseif ($nav=='Transients') 
 		{
 			if (atec_pro_feature('`Transients´ shows all timed out transients´ – cleanup with a single click')) 
-			{ require_once('atec-wpdb-transients-pro.php'); new ATEC_wpdb_transients($url, $nonce, $action, $prefix); } 
+			{ 
+				@include_once('atec-wpdb-transients-pro.php'); 
+				if (class_exists('ATEC_wpdb_transients')) new ATEC_wpdb_transients($url, $nonce, $action, $prefix); 
+				else atec_missing_class_check();
+			} 
 		}
 		elseif ($nav=='Options') 
 		{ 
 			if (atec_pro_feature('`Options´ shows all entries in the options table. You can selectively delete them and set the autoload value'))
-			{ require_once('atec-wpdb-options-pro.php'); new ATEC_wpdb_options($url, $nonce, $action, $prefix); }
+			{ 
+				@include_once('atec-wpdb-options-pro.php'); 
+				if (class_exists('ATEC_wpdb_options')) new ATEC_wpdb_options($url, $nonce, $action, $prefix); 
+				else atec_missing_class_check();
+			}
 		}
 		else
 		{
